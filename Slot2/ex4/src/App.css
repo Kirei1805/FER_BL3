@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.App h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.App ul {
+  font-size: 1.2em;
+  line-height: 1.6;
+}
