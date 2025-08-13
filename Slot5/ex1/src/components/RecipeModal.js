@@ -9,7 +9,7 @@ const RecipeModal = ({ show, onHide, recipe, onAddToCart }) => {
     const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const encodedTitle = encodeURIComponent(title);
-    return `https://via.placeholder.com/400x300/${color.replace('#', '')}/ffffff?text=${encodedTitle}`;
+    return `https://via.placeholder.com/400x300/${color.replace('', '')}/ffffff?text=${encodedTitle}`;
   };
 
   return (

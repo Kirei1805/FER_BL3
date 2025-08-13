@@ -3,14 +3,12 @@ import { Container, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// Components
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SearchAndFilter from './components/SearchAndFilter';
 import RecipeList from './components/RecipeList';
 import RecipeModal from './components/RecipeModal';
 
-// Data
 import { recipes } from './data/recipes';
 
 function App() {
@@ -21,7 +19,6 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  // Filter recipes based on search term and time filters
   const filteredRecipes = useMemo(() => {
     return recipes.filter(recipe => {
       const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
