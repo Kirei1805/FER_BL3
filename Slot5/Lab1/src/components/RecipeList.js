@@ -33,7 +33,6 @@ const RecipeList = ({
         ))}
       </Row>
       
-      {/* Always show pagination to allow changing items per page */}
       <RecipePagination
         currentPage={currentPage}
         totalPages={totalPages}

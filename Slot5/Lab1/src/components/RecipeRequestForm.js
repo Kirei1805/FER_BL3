@@ -23,7 +23,6 @@ const RecipeRequestForm = ({ show, onHide }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Xử lý submit form ở đây
     console.log('Form submitted:', formData);
     setShowSuccess(true);
     setTimeout(() => {
@@ -147,4 +146,5 @@ const RecipeRequestForm = ({ show, onHide }) => {
 };
 
 export default RecipeRequestForm;
+
 

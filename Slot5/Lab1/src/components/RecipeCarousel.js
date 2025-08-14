@@ -66,3 +66,4 @@ const RecipeCarousel = ({ recipes, onViewRecipe }) => {
 
 export default RecipeCarousel;
 
+
