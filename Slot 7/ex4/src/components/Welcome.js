@@ -6,3 +6,4 @@ function Welcome({ name }) {
   );
 }
 export default Welcome;
+

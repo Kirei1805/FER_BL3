@@ -10,3 +10,4 @@ const NameList = ({ names }) => {
   );
 };
 export default NameList;
+

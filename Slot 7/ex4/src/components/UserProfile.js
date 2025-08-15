@@ -6,3 +6,4 @@ const UserProfile = ({ user }) => (
   </div>
 );
 export default UserProfile;
+
