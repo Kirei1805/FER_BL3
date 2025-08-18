@@ -43,7 +43,8 @@ function App() {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(movie =>
-        movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        movie.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
