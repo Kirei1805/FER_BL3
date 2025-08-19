@@ -12,7 +12,6 @@ const ProfileForm = ({ onSubmit }) => {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Validation functions
   const validateName = (value) => {
     return value.trim() !== '' ? '' : 'Tên không được để trống';
   };
@@ -26,7 +25,6 @@ const ProfileForm = ({ onSubmit }) => {
     return numAge >= 1 ? '' : 'Tuổi phải lớn hơn hoặc bằng 1';
   };
 
-  // Handle input changes
   const handleNameChange = (e) => {
     const value = e.target.value;
     setName(value);
@@ -45,7 +43,6 @@ const ProfileForm = ({ onSubmit }) => {
     setErrors(prev => ({ ...prev, age: validateAge(value) }));
   };
 
-  // Check if form is valid
   const isFormValid = () => {
     return (
       name.trim() !== '' &&
@@ -55,33 +52,28 @@ const ProfileForm = ({ onSubmit }) => {
     );
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     
     if (isFormValid()) {
-      // Show toast notification
       toast.success('Submitted successfully!');
       setShowToast(true);
       
-      // Show modal with submitted data
       setShowModal(true);
       
-      // Call onSubmit prop if provided
       if (onSubmit) {
         onSubmit({ name, email, age });
       }
     }
   };
 
-  // Close modal
   const closeModal = () => {
     setShowModal(false);
   };
 
   return (
     <div className="profile-form-container">
-      <ToastContainer position="top-right" autoClose={3000} />
+      {showToast && <ToastContainer position="top-right" autoClose={3000} />}
       
       <form onSubmit={handleSubmit} className="profile-form">
         <h2>Profile Form</h2>
@@ -135,7 +127,6 @@ const ProfileForm = ({ onSubmit }) => {
         </button>
       </form>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -162,3 +153,4 @@ ProfileForm.propTypes = {
 };
 
 export default ProfileForm;
+
