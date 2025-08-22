@@ -11,7 +11,6 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleNavbarSearch = (searchTerm) => {
-    // Handle navbar search if needed in the future
     console.log('Navbar search:', searchTerm);
   };
 

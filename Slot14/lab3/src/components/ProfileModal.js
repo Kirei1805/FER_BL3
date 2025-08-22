@@ -131,7 +131,6 @@ const ProfileModal = ({ show, onHide }) => {
 
   const steps = ['About', 'Account', 'Address'];
 
-  // Calculate step validity using useMemo
   const stepValidity = useMemo(() => {
     return {
       0: validateAbout(formState.about),
@@ -140,17 +139,14 @@ const ProfileModal = ({ show, onHide }) => {
     };
   }, [formState]);
 
-  // Calculate progress percentage
   const progressPercentage = useMemo(() => {
     return ((currentStep + 1) / steps.length) * 100;
   }, [currentStep, steps.length]);
 
-  // Check if current step is valid
   const isStepValid = useMemo(() => {
     return stepValidity[currentStep];
   }, [stepValidity, currentStep]);
 
-  // Handlers using useCallback
   const nextStep = useCallback(() => {
     if (isStepValid && currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -181,13 +177,11 @@ const ProfileModal = ({ show, onHide }) => {
     }
   }, [onFieldChange]);
 
-  // useEffect to handle avatar URL creation and cleanup
   useEffect(() => {
     if (formState.about.avatar) {
       const url = URL.createObjectURL(formState.about.avatar);
       setAvatarUrl(url);
       
-      // Cleanup function to revoke URL when component unmounts or avatar changes
       return () => {
         URL.revokeObjectURL(url);
       };
@@ -196,10 +190,8 @@ const ProfileModal = ({ show, onHide }) => {
     }
   }, [formState.about.avatar]);
 
-  // useEffect to reset form when modal closes
   useEffect(() => {
     if (!show) {
-      // Reset form when modal is closed
       dispatch({ type: 'RESET_FORM' });
       setCurrentStep(0);
       setShowPassword(false);
@@ -215,26 +207,21 @@ const ProfileModal = ({ show, onHide }) => {
   // useEffect to handle modal open/close effects
   useEffect(() => {
     if (show) {
-      // When modal opens, focus on first input
       const firstInput = document.querySelector('.profile-modal input');
       if (firstInput) {
         setTimeout(() => firstInput.focus(), 100);
       }
       
-      // Add body scroll lock
       document.body.style.overflow = 'hidden';
       
       return () => {
-        // Remove body scroll lock when modal closes
         document.body.style.overflow = 'unset';
       };
     }
   }, [show]);
 
-  // useEffect to show toast when form is successfully submitted
   useEffect(() => {
     if (showSuccessModal) {
-      // Chỉ ẩn toast sau 3 giây, không đóng success modal
       const timer = setTimeout(() => {
         setShowToast(false);
       }, 3000);
@@ -243,11 +230,9 @@ const ProfileModal = ({ show, onHide }) => {
     }
   }, [showSuccessModal]);
 
-  // useEffect to track validation errors in real-time
   useEffect(() => {
     const errors = {};
     
-    // About validation
     if (formState.about.firstName && !formState.about.firstName.trim()) {
       errors.firstName = 'First name cannot be empty';
     }
@@ -277,7 +262,6 @@ const ProfileModal = ({ show, onHide }) => {
     setValidationErrors(errors);
   }, [formState]);
 
-  // useEffect to track step completion and show progress feedback
   useEffect(() => {
     const completion = {
       0: stepValidity[0],
@@ -287,7 +271,6 @@ const ProfileModal = ({ show, onHide }) => {
     
     setStepCompletion(completion);
     
-    // Log completion status for debugging
     console.log('Step completion status:', completion);
   }, [stepValidity]);
 
@@ -295,7 +278,7 @@ const ProfileModal = ({ show, onHide }) => {
     if (isStepValid) {
       setShowSuccessModal(true);
       setShowToast(true);
-      // Không đóng modal ngay lập tức, để hiển thị success modal trước
+ 
     }
   }, [isStepValid]);
 
@@ -303,7 +286,6 @@ const ProfileModal = ({ show, onHide }) => {
     onHide();
   }, [onHide]);
 
-  // Countries list
   const countries = [
     'Viet Nam',
     'Korea',
@@ -317,7 +299,6 @@ const ProfileModal = ({ show, onHide }) => {
     'Australia'
   ];
 
-  // Secret questions
   const secretQuestions = [
     'What is your first pet\'s name?',
     'What is your mother\'s maiden name?',
@@ -666,7 +647,7 @@ const ProfileModal = ({ show, onHide }) => {
              {/* Success Modal */}
        <Modal show={showSuccessModal} onHide={() => {
          setShowSuccessModal(false);
-         onHide(); // Đóng modal chính khi đóng success modal
+         onHide(); 
        }} centered>
         <Modal.Header closeButton>
           <Modal.Title>Your Profile</Modal.Title>
