@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
 
 const Profile = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, updateProfile } = useAuth();
   const { isDarkMode } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,6 +14,18 @@ const Profile = () => {
     phone: user?.phone || '',
     address: user?.address || ''
   });
+
+  // Update formData when user data changes
+  React.useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        address: user.address || ''
+      });
+    }
+  }, [user]);
 
   if (!isAuthenticated) {
     return (
@@ -34,8 +46,20 @@ const Profile = () => {
   };
 
   const handleSave = () => {
-    // Ở đây bạn có thể thêm logic để cập nhật thông tin user
-    toast.success('Thông tin đã được cập nhật thành công!');
+    // Validate form data
+    if (!formData.name.trim()) {
+      toast.error('Vui lòng nhập họ và tên!');
+      return;
+    }
+    
+    if (!formData.email.trim()) {
+      toast.error('Vui lòng nhập email!');
+      return;
+    }
+    
+    // Update user profile
+    updateProfile(formData);
+    toast.success('✅ Thông tin đã được cập nhật thành công!');
     setIsEditing(false);
   };
 
@@ -50,17 +74,18 @@ const Profile = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <Row className="justify-content-center">
-        <Col md={8} lg={6}>
-          <Card className={`shadow ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+    <div className={`profile-page ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={8} lg={6}>
+            <Card className="profile-card">
             <Card.Header className="text-center">
               <h3>👤 Hồ sơ cá nhân</h3>
             </Card.Header>
             <Card.Body>
               <div className="text-center mb-4">
                 <div 
-                  className="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3"
+                  className="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3 profile-avatar"
                   style={{
                     width: '100px',
                     height: '100px',
@@ -74,7 +99,7 @@ const Profile = () => {
                 <small className="text-muted">Thành viên từ {new Date().toLocaleDateString('vi-VN')}</small>
               </div>
 
-              <Form>
+              <Form className="profile-form">
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
@@ -133,7 +158,7 @@ const Profile = () => {
                   </Col>
                 </Row>
 
-                <div className="d-flex justify-content-center gap-2 mt-4">
+                <div className="d-flex justify-content-center gap-2 mt-4 profile-actions">
                   {!isEditing ? (
                     <Button 
                       variant="primary" 
@@ -168,7 +193,7 @@ const Profile = () => {
           {/* Thống kê */}
           <Row className="mt-4">
             <Col md={4}>
-              <Card className={`text-center ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+              <Card className="profile-stats-card text-center">
                 <Card.Body>
                   <h4>🛒</h4>
                   <h5>0</h5>
@@ -177,7 +202,7 @@ const Profile = () => {
               </Card>
             </Col>
             <Col md={4}>
-              <Card className={`text-center ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+              <Card className="profile-stats-card text-center">
                 <Card.Body>
                   <h4>❤️</h4>
                   <h5>0</h5>
@@ -186,7 +211,7 @@ const Profile = () => {
               </Card>
             </Col>
             <Col md={4}>
-              <Card className={`text-center ${isDarkMode ? 'bg-dark text-light' : ''}`}>
+              <Card className="profile-stats-card text-center">
                 <Card.Body>
                   <h4>⭐</h4>
                   <h5>0</h5>
@@ -197,8 +222,11 @@ const Profile = () => {
           </Row>
         </Col>
       </Row>
-    </Container>
+      </Container>
+    </div>
   );
 };
 
 export default Profile;
+
+

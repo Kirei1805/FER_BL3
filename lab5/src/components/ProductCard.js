@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const { addToFavourites, isInFavourites } = useFavourites();
+  const { addToFavourites, removeFromFavourites, isInFavourites } = useFavourites();
   const { isAuthenticated } = useAuth();
 
   const handleAddToCart = () => {
@@ -16,19 +16,19 @@ const ProductCard = ({ product }) => {
     toast.success('🛒 Đã thêm vào giỏ hàng!');
   };
 
-  const handleAddToFavourites = () => {
+  const handleToggleFavourites = () => {
     if (!isAuthenticated) {
       toast.error('🔐 Vui lòng đăng nhập để thêm vào yêu thích!');
       return;
     }
     
     if (isInFavourites(product.id)) {
-      toast.info('❤️ Sản phẩm đã có trong yêu thích!');
-      return;
+      removeFromFavourites(product.id);
+      toast.success('💔 Đã hủy yêu thích!');
+    } else {
+      addToFavourites(product);
+      toast.success('❤️ Đã thêm vào yêu thích!');
     }
-    
-    addToFavourites(product);
-    toast.success('❤️ Đã thêm vào yêu thích!');
   };
 
   return (
@@ -88,7 +88,7 @@ const ProductCard = ({ product }) => {
             variant={isInFavourites(product.id) ? "warning" : "outline-danger"} 
             size="sm"
             className="w-100"
-            onClick={handleAddToFavourites}
+            onClick={handleToggleFavourites}
           >
             {isInFavourites(product.id) ? '❤️ Đã yêu thích' : '🤍 Yêu thích'}
           </Button>
@@ -99,3 +99,5 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+
+

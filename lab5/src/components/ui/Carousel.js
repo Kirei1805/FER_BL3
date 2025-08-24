@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel as BootstrapCarousel } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './Carousel.css';
 
-const Carousel = ({ images, autoPlay = true, interval = 3000 }) => {
+const Carousel = ({ images = [], autoPlay = true, interval = 4000 }) => {
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex) => {
@@ -11,38 +10,50 @@ const Carousel = ({ images, autoPlay = true, interval = 3000 }) => {
   };
 
   useEffect(() => {
-    if (autoPlay) {
-      const timer = setInterval(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, interval);
+    if (!autoPlay) return;
 
-      return () => clearInterval(timer);
-    }
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, interval);
+
+    return () => clearInterval(timer);
   }, [autoPlay, interval, images.length]);
 
+  if (!images || images.length === 0) {
+    return (
+      <div className="carousel-placeholder">
+        <div className="placeholder-content">
+          <h3>🍽️ Chào mừng đến với Nhà hàng Delicious</h3>
+          <p>Khám phá những món ăn độc đáo với hương vị tuyệt vời</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="carousel-container">
+    <div className="custom-carousel">
       <BootstrapCarousel
         activeIndex={index}
         onSelect={handleSelect}
-        indicators={true}
-        controls={true}
         interval={autoPlay ? interval : null}
+        controls={images.length > 1}
+        indicators={images.length > 1}
         pause="hover"
-        className="custom-carousel"
       >
         {images.map((image, idx) => (
           <BootstrapCarousel.Item key={idx}>
-            <div className="carousel-item-wrapper">
+            <div className="carousel-image-container">
               <img
                 className="d-block w-100 carousel-image"
-                src={image.src}
-                alt={image.alt}
+                src={image.src || image.url || image}
+                alt={image.alt || `Slide ${idx + 1}`}
               />
-              <BootstrapCarousel.Caption className="carousel-caption">
-                <h3>{image.title}</h3>
-                <p>{image.description}</p>
-              </BootstrapCarousel.Caption>
+              {(image.title || image.description) && (
+                <div className="carousel-caption">
+                  {image.title && <h3>{image.title}</h3>}
+                  {image.description && <p>{image.description}</p>}
+                </div>
+              )}
             </div>
           </BootstrapCarousel.Item>
         ))}

@@ -4,9 +4,16 @@ import { Form, Row, Col, InputGroup } from 'react-bootstrap';
 const SearchBar = ({ products, onFilteredProducts }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
-
+ const resetFilters = () => {
+    setSearchTerm('');
+    setCategoryFilter('');
+    setPriceRange({ min: '', max: '' });
+    setSortBy('name');
+    setSortOrder('asc');
+  };
   // Sử dụng useMemo để tối ưu hóa việc filter và sort
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products;
@@ -26,6 +33,16 @@ const SearchBar = ({ products, onFilteredProducts }) => {
       );
     }
 
+    // Filter theo price range
+    if (priceRange.min !== '' || priceRange.max !== '') {
+      filtered = filtered.filter(product => {
+        const price = typeof product.price === 'number' ? product.price : parseFloat(product.price) || 0;
+        const min = priceRange.min !== '' ? parseFloat(priceRange.min) : 0;
+        const max = priceRange.max !== '' ? parseFloat(priceRange.max) : Infinity;
+        return price >= min && price <= max;
+      });
+    }
+
     // Sort products
     filtered.sort((a, b) => {
       let aValue, bValue;
@@ -36,27 +53,38 @@ const SearchBar = ({ products, onFilteredProducts }) => {
           bValue = b.name.toLowerCase();
           break;
         case 'price':
-          aValue = parseFloat(a.price);
-          bValue = parseFloat(b.price);
+          // Ensure price is a number and handle edge cases
+          aValue = typeof a.price === 'number' ? a.price : parseFloat(a.price) || 0;
+          bValue = typeof b.price === 'number' ? b.price : parseFloat(b.price) || 0;
           break;
         case 'rating':
-          aValue = a.rating;
-          bValue = b.rating;
+          aValue = typeof a.rating === 'number' ? a.rating : parseFloat(a.rating) || 0;
+          bValue = typeof b.rating === 'number' ? b.rating : parseFloat(b.rating) || 0;
           break;
         default:
           aValue = a.name.toLowerCase();
           bValue = b.name.toLowerCase();
       }
 
+      // Handle string comparison
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        if (sortOrder === 'asc') {
+          return aValue.localeCompare(bValue);
+        } else {
+          return bValue.localeCompare(aValue);
+        }
+      }
+
+      // Handle number comparison
       if (sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1;
+        return aValue - bValue;
       } else {
-        return aValue < bValue ? 1 : -1;
+        return bValue - aValue;
       }
     });
 
     return filtered;
-  }, [products, searchTerm, categoryFilter, sortBy, sortOrder]);
+  }, [products, searchTerm, categoryFilter, priceRange, sortBy, sortOrder]);
 
   // Lấy danh sách categories duy nhất
   const categories = useMemo(() => {
@@ -72,7 +100,7 @@ const SearchBar = ({ products, onFilteredProducts }) => {
   return (
     <div className="search-bar-container mb-4">
       <Row className="g-3">
-        <Col md={4}>
+        <Col md={3}>
           <InputGroup>
             <InputGroup.Text>🔍</InputGroup.Text>
             <Form.Control
@@ -84,7 +112,7 @@ const SearchBar = ({ products, onFilteredProducts }) => {
           </InputGroup>
         </Col>
         
-        <Col md={3}>
+        <Col md={2}>
           <Form.Select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -97,31 +125,49 @@ const SearchBar = ({ products, onFilteredProducts }) => {
             ))}
           </Form.Select>
         </Col>
-        
+
         <Col md={2}>
-          <Form.Select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="name">Tên</option>
-            <option value="price">Giá</option>
-            <option value="rating">Đánh giá</option>
-          </Form.Select>
+          <InputGroup>
+            <InputGroup.Text>💰</InputGroup.Text>
+            <Form.Control
+              type="number"
+              placeholder="Từ"
+              value={priceRange.min}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+              min="0"
+              step="0.01"
+            />
+          </InputGroup>
         </Col>
-        
+
         <Col md={2}>
+          <InputGroup>
+            <InputGroup.Text>💰</InputGroup.Text>
+            <Form.Control
+              type="number"
+              placeholder="Đến"
+              value={priceRange.max}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+              min="0"
+              step="0.01"
+            />
+          </InputGroup>
+        </Col>
+      
+        
+        <Col md={1}>
           <Form.Select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="asc">Tăng dần</option>
-            <option value="desc">Giảm dần</option>
+            <option value="asc">↑</option>
+            <option value="desc">↓</option>
           </Form.Select>
         </Col>
         
         <Col md={1}>
           <div className="d-flex justify-content-end">
-            <span className="text-muted">
+            <span className="search-results-counter">
               {filteredAndSortedProducts.length} sản phẩm
             </span>
           </div>

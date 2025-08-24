@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { addToFavourites, isInFavourites } = useFavourites();
+  const { addToFavourites, removeFromFavourites, isInFavourites } = useFavourites();
   const { isAuthenticated } = useAuth();
   const { isDarkMode } = useTheme();
 
@@ -37,19 +37,19 @@ const ProductDetail = () => {
     toast.success('🛒 Đã thêm vào giỏ hàng!');
   };
 
-  const handleAddToFavourites = () => {
+  const handleToggleFavourites = () => {
     if (!isAuthenticated) {
       toast.error('🔐 Vui lòng đăng nhập để thêm vào yêu thích!');
       return;
     }
     
     if (isInFavourites(product.id)) {
-      toast.info('❤️ Sản phẩm đã có trong yêu thích!');
-      return;
+      removeFromFavourites(product.id);
+      toast.success('💔 Đã hủy yêu thích!');
+    } else {
+      addToFavourites(product);
+      toast.success('❤️ Đã thêm vào yêu thích!');
     }
-    
-    addToFavourites(product);
-    toast.success('❤️ Đã thêm vào yêu thích!');
   };
 
   const handleBackToList = () => {
@@ -139,7 +139,7 @@ const ProductDetail = () => {
                     variant={isInFavourites(product.id) ? "warning" : "outline-danger"} 
                     size="lg" 
                     className="me-3 mb-2"
-                    onClick={handleAddToFavourites}
+                    onClick={handleToggleFavourites}
                   >
                     {isInFavourites(product.id) ? '❤️ Đã yêu thích' : '🤍 Yêu thích'}
                   </Button>
@@ -153,19 +153,65 @@ const ProductDetail = () => {
         <div className="related-products-section">
           <h3>🍽️ Sản phẩm liên quan</h3>
           <div className="related-products-grid">
-            {products
-              .filter(p => p.id !== product.id && p.category === product.category)
-              .slice(0, 3)
-              .map(relatedProduct => (
-                <Card key={relatedProduct.id} className="related-product-card">
-                  <Card.Img 
+            {(() => {
+              const relatedProducts = products
+                .filter(p => p.id !== product.id && p.category === product.category)
+                .slice(0, 3);
+              
+              if (relatedProducts.length === 0) {
+                // Nếu không có sản phẩm cùng category, hiển thị sản phẩm khác
+                const otherProducts = products
+                  .filter(p => p.id !== product.id)
+                  .slice(0, 3);
+                
+                return otherProducts.map(relatedProduct => (
+                  <Card key={relatedProduct.id} className="related-product-card">
+                                      <Card.Img 
                     variant="top" 
                     src={relatedProduct.image} 
                     alt={relatedProduct.name}
                     onError={(e) => {
                       e.target.src = 'https://via.placeholder.com/300x150?text=Không+có+hình+ảnh';
+                      e.target.onerror = null; // Prevent infinite loop
                     }}
+                    onLoad={(e) => {
+                      e.target.style.display = 'block';
+                    }}
+                    style={{ display: 'none' }}
                   />
+                    <Card.Body>
+                      <Card.Title>{relatedProduct.name}</Card.Title>
+                      <Card.Text>
+                        ${relatedProduct.price}
+                      </Card.Text>
+                      <Button 
+                        as={Link} 
+                        to={`/product/${relatedProduct.id}`}
+                        variant="outline-primary" 
+                        size="sm"
+                      >
+                        Xem chi tiết
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                ));
+              }
+              
+                             return relatedProducts.map(relatedProduct => (
+                 <Card key={relatedProduct.id} className="related-product-card">
+                   <Card.Img 
+                     variant="top" 
+                     src={relatedProduct.image} 
+                     alt={relatedProduct.name}
+                     onError={(e) => {
+                       e.target.src = 'https://via.placeholder.com/300x150?text=Không+có+hình+ảnh';
+                       e.target.onerror = null; // Prevent infinite loop
+                     }}
+                     onLoad={(e) => {
+                       e.target.style.display = 'block';
+                     }}
+                     style={{ display: 'none' }}
+                   />
                   <Card.Body>
                     <Card.Title>{relatedProduct.name}</Card.Title>
                     <Card.Text>
@@ -181,7 +227,8 @@ const ProductDetail = () => {
                     </Button>
                   </Card.Body>
                 </Card>
-              ))}
+              ));
+            })()}
           </div>
         </div>
       </Container>
@@ -190,3 +237,4 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
+
