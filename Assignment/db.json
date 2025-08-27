@@ -9,7 +9,7 @@
       "brand": "Yamaha",
       "image": "/images/Yamaha-F310.jpg",
       "isBestSeller": true,
-      "inStock": 46
+      "inStock": 44
     },
     {
       "id": "2",
@@ -20,7 +20,7 @@
       "brand": "Fender",
       "image": "/images/Fender Stratocaster Electric Guitar.jpg",
       "isBestSeller": true,
-      "inStock": 12
+      "inStock": 9
     },
     {
       "id": "3",
@@ -86,7 +86,7 @@
       "brand": "Roland",
       "image": "/images/Roland TD-17KVX Electronic Drum Kit.jpg",
       "isBestSeller": true,
-      "inStock": 5
+      "inStock": 4
     },
     {
       "id": "9",
@@ -614,7 +614,8 @@
       "firstname": "lợi",
       "lastname": "Phan",
       "phone": "0705047664",
-      "address": "k54 huyền trân"
+      "address": "k54 huyền trân",
+      "wishlist": []
     },
     {
       "username": "user3",
@@ -649,7 +650,32 @@
       "id": "3027",
       "username": "loi",
       "password": "123",
-      "email": "loiptde180537@fpt.edu.vn"
+      "email": "loiptde180537@fpt.edu.vn",
+      "wishlist": []
+    },
+    {
+      "id": "3062",
+      "username": "nam",
+      "password": "123123",
+      "email": "namkute140904@gmail.com",
+      "firstname": "",
+      "lastname": "",
+      "phone": "",
+      "address": "",
+      "avatar": "https://demoda.vn/wp-content/uploads/2022/04/tai-anh-cute-nam-anime-dep-trai.jpg",
+      "wishlist": [
+        {
+          "id": "4",
+          "name": "Yamaha PSR-E373 Portable Keyboard",
+          "price": 249.99,
+          "description": "The Yamaha PSR-E373 is a 61-key portable keyboard with touch-sensitive keys, 622 voices, and built-in lessons. Perfect for beginners and intermediate players.",
+          "category": "Keyboard",
+          "brand": "Yamaha",
+          "image": "/images/Yamaha PSR-E373 Portable Keyboard.jpg",
+          "isBestSeller": false,
+          "inStock": 10
+        }
+      ]
     }
   ],
   "orders": [
@@ -1246,6 +1272,79 @@
       "total": 199.99,
       "date": "2025-08-24T15:18:17.527Z",
       "shipaddress": "k54 ádjghsad"
+    },
+    {
+      "id": "b46b",
+      "orderId": 1756127403809,
+      "userId": "3027",
+      "userDetails": {
+        "name": "phan tấn lợi",
+        "phone": "0705047664",
+        "email": "loiptde180537@fpt.edu.vn",
+        "address": "kk54 huyèn tran"
+      },
+      "products": [
+        {
+          "name": "Yamaha F310 Acoustic Guitar",
+          "quantity": 1,
+          "totalPrice": 199.99
+        },
+        {
+          "name": "Roland TD-17KVX Electronic Drum Kit",
+          "quantity": 1,
+          "totalPrice": 1699.99
+        }
+      ],
+      "total": 1899.98,
+      "date": "2025-08-25T13:10:03.809Z",
+      "shipaddress": "kk54 huyèn tran"
+    },
+    {
+      "id": "ff33",
+      "orderId": 1756178147326,
+      "userId": "3062",
+      "userDetails": {
+        "name": "nam",
+        "phone": "0990230124",
+        "email": "namkute140904@gmail.com",
+        "address": "k216365gs"
+      },
+      "products": [
+        {
+          "name": "Fender Stratocaster Electric Guitar",
+          "quantity": 1,
+          "totalPrice": 699.99
+        }
+      ],
+      "total": 699.99,
+      "date": "2025-08-26T03:15:47.326Z",
+      "shipaddress": "k216365gs"
+    },
+    {
+      "id": "e089",
+      "orderId": 1756183182604,
+      "userId": "3062",
+      "userDetails": {
+        "name": "nam",
+        "phone": "0902397123",
+        "email": "namkute140904@gmail.com",
+        "address": "nhu hanh son"
+      },
+      "products": [
+        {
+          "name": "Yamaha F310 Acoustic Guitar",
+          "quantity": 1,
+          "totalPrice": 199.99
+        },
+        {
+          "name": "Fender Stratocaster Electric Guitar",
+          "quantity": 2,
+          "totalPrice": 1399.98
+        }
+      ],
+      "total": 1599.97,
+      "date": "2025-08-26T04:39:42.604Z",
+      "shipaddress": "nhu hanh son"
     }
   ]
 }
